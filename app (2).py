@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import joblib
@@ -9,39 +8,41 @@ st.set_page_config(
     layout="wide"
 )
 
-# Load Files
+# Load model files
 model = joblib.load("best_model.pkl")
 scaler = joblib.load("scaler.pkl")
 feature_names = joblib.load("feature_names.pkl")
 
 # Title
 st.title("📱 Mobile Phone Price Prediction")
-st.markdown(
-    "Predict the price category of a mobile phone based on its specifications."
-)
+st.markdown("Enter mobile specifications below to predict its price category.")
 
 # Sidebar
 st.sidebar.title("📲 Mobile Specifications")
 
 battery_power = st.sidebar.selectbox(
     "Battery Capacity (mAh)",
-    [1000, 1500, 2000, 2500, 3000, 3500, 4000, 5000]
+    [500, 800, 1000, 1200, 1500, 1800, 2000]
 )
 
-blue = st.sidebar.selectbox("Bluetooth", ["No", "Yes"])
+blue = st.sidebar.selectbox(
+    "Bluetooth Support",
+    ["No", "Yes"]
+)
 
-clock_speed = st.sidebar.slider(
+clock_speed = st.sidebar.selectbox(
     "Processor Speed (GHz)",
-    0.5,
-    3.5,
-    2.0
+    [0.5, 0.8, 1.0, 1.2, 1.5, 2.0, 2.5, 3.0]
 )
 
-dual_sim = st.sidebar.selectbox("Dual SIM", ["No", "Yes"])
+dual_sim = st.sidebar.selectbox(
+    "Dual SIM",
+    ["No", "Yes"]
+)
 
 fc = st.sidebar.selectbox(
     "Front Camera (MP)",
-    [2, 5, 8, 12, 16, 32]
+    [0, 1, 2, 3, 5, 8, 10, 12]
 )
 
 four_g = st.sidebar.selectbox(
@@ -51,7 +52,7 @@ four_g = st.sidebar.selectbox(
 
 int_memory = st.sidebar.selectbox(
     "Internal Storage (GB)",
-    [8, 16, 32, 64, 128, 256]
+    [2, 4, 8, 16, 32, 64]
 )
 
 m_dep = st.sidebar.slider(
@@ -61,47 +62,45 @@ m_dep = st.sidebar.slider(
     0.5
 )
 
-mobile_wt = st.sidebar.slider(
+mobile_wt = st.sidebar.selectbox(
     "Mobile Weight (g)",
-    80,
-    250,
-    150
+    [80, 100, 120, 140, 160, 180, 200]
 )
 
 n_cores = st.sidebar.selectbox(
     "CPU Cores",
-    [1, 2, 4, 6, 8]
+    [1, 2, 3, 4, 5, 6, 7, 8]
 )
 
 pc = st.sidebar.selectbox(
     "Rear Camera (MP)",
-    [8, 12, 16, 32, 48, 64, 108]
+    [2, 5, 8, 10, 12, 16, 20]
 )
 
-px_height = st.sidebar.number_input(
+px_height = st.sidebar.selectbox(
     "Screen Resolution Height",
-    value=1280
+    [0, 240, 480, 720, 1080, 1440, 1920]
 )
 
-px_width = st.sidebar.number_input(
+px_width = st.sidebar.selectbox(
     "Screen Resolution Width",
-    value=720
+    [240, 480, 720, 1080, 1440, 1920]
 )
 
 ram = st.sidebar.selectbox(
     "RAM (MB)",
-    [512, 1024, 2048, 3072, 4096, 6144, 8192]
+    [256, 512, 1024, 1536, 2048, 3072, 4096]
 )
 
 sc_h = st.sidebar.slider(
-    "Screen Height",
+    "Screen Height (cm)",
     5,
     20,
     10
 )
 
 sc_w = st.sidebar.slider(
-    "Screen Width",
+    "Screen Width (cm)",
     3,
     15,
     5
@@ -125,7 +124,7 @@ touch_screen = st.sidebar.selectbox(
 )
 
 wifi = st.sidebar.selectbox(
-    "WiFi",
+    "WiFi Support",
     ["No", "Yes"]
 )
 
@@ -137,7 +136,7 @@ three_g = 1 if three_g == "Yes" else 0
 touch_screen = 1 if touch_screen == "Yes" else 0
 wifi = 1 if wifi == "Yes" else 0
 
-# Input Data
+# Arrange input exactly like training features
 input_data = [[
     battery_power,
     blue,
@@ -161,6 +160,7 @@ input_data = [[
     wifi
 ]]
 
+# Prediction
 if st.button("🔮 Predict Price Category"):
 
     data = pd.DataFrame(
@@ -186,4 +186,3 @@ if st.button("🔮 Predict Price Category"):
 st.markdown("---")
 st.write("✅ Best Model: Logistic Regression")
 st.write("✅ Accuracy: 97.5%")
-
