@@ -186,4 +186,4 @@ if st.button("🔮 Predict Price Category"):
 st.markdown("---")
 st.write("✅ Best Model: Logistic Regression")
 st.write("✅ Accuracy: 97.5%")
-```
+
